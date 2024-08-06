@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukesmeny</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        #content {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        p.MsoNormal {
+            text-align: center;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="content"></div>
+
+    <script>
+        async function getMenu() {
+            const proxyUrl = 'https://66b2007d4ae7b600081f8c69--gorgeous-mandazi-164a7c.netlify.app/.netlify/functions/cors-proxy/?url=';
+            const targetUrl = 'https://cag30.munu.shop/ukens';
+
+            const response = await fetch(proxyUrl + targetUrl);
+            const text = await response.text();
+
+            // Function to decode unicode escapes
+            function decodeUnicodeEscapes(str) {
+                return str.replace(/\\u([0-9A-Fa-f]{4})/g, (match, group1) => {
+                    return String.fromCharCode(parseInt(group1, 16));
+                });
+            }
+
+            const escapedText = text;
+            const decodedText = decodeUnicodeEscapes(escapedText);
+            const unescapedText = decodeURIComponent(decodedText);
+
+            const bodyIndex = unescapedText.indexOf('"Ukesmeny');
+            const endBody = unescapedText.indexOf("}", bodyIndex);
+            const extractedText = unescapedText.substring(bodyIndex, endBody -1).replaceAll('\\"', '').replaceAll('\\', '');
+
+            document.getElementById('content').innerHTML = extractedText;
+        }
+
+        getMenu();
+    </script>
+</body>
+</html>
+
