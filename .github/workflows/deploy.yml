@@ -3,7 +3,7 @@ name: Deploy CORS Proxy
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
