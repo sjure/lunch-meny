@@ -6,7 +6,7 @@ const MenuPage: React.FC = () => {
     useEffect(() => {
         const getMenu = async () => {
             const proxyUrl =
-                'https://66b2007d4ae7b600081f8c69--gorgeous-mandazi-164a7c.netlify.app/.netlify/functions/cors-proxy/?url='
+                'https://lunch-meny.netlify.app/.netlify/functions/cors-proxy/?url='
             const targetUrl = 'https://cag30.munu.shop/ukens'
 
             const response = await fetch(proxyUrl + targetUrl)
