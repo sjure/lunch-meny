@@ -1,5 +1,6 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import React from 'react'
+import MenuPage from './menuPage'
 
 const darkTheme = createTheme({
     palette: {
@@ -11,7 +12,7 @@ function App() {
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <main>This app is using the dark mode</main>
+            <MenuPage />
         </ThemeProvider>
     )
 }
