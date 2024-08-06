@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
+    console.log(event.queryStringParameters);
   const targetURL = event.queryStringParameters.url;
 
   if (!targetURL) {
