@@ -1,40 +1,29 @@
-const http = require('http');
-const https = require('https');
-const url = require('url');
+const fetch = require('node-fetch');
 
-const server = http.createServer((req, res) => {
-  const query = url.parse(req.url, true).query;
-  const targetUrl = query.url;
+exports.handler = async function(event, context) {
+  const targetURL = event.queryStringParameters.url;
 
-  if (!targetUrl) {
-    res.writeHead(400, { 'Content-Type': 'text/plain' });
-    res.end('No target URL specified');
-    return;
+  if (!targetURL) {
+    return {
+      statusCode: 400,
+      body: 'No target URL specified',
+    };
   }
 
-  const proxyReq = https.request(targetUrl, (proxyRes) => {
-    let body = '';
-    proxyRes.on('data', (chunk) => {
-      body += chunk;
-    });
-    proxyRes.on('end', () => {
-      res.writeHead(200, {
-        'Content-Type': 'application/json',
+  try {
+    const response = await fetch(targetURL);
+    const data = await response.text();
+    return {
+      statusCode: 200,
+      headers: {
         'Access-Control-Allow-Origin': '*',
-      });
-      res.end(body);
-    });
-  });
-
-  proxyReq.on('error', (err) => {
-    res.writeHead(500, { 'Content-Type': 'text/plain' });
-    res.end(err.toString());
-  });
-
-  proxyReq.end();
-});
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`CORS Proxy running on port ${PORT}`);
-});
+      },
+      body: data,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: error.toString(),
+    };
+  }
+};

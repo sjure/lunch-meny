@@ -1,10 +1,11 @@
 {
-    "name": "cors-proxy",
-    "version": "1.0.0",
-    "main": "cors-proxy.js",
-    "scripts": {
-      "start": "node cors-proxy.js"
-    },
-    "dependencies": {}
+  "name": "cors-proxy",
+  "version": "1.0.0",
+  "main": "netlify/functions/cors-proxy.js",
+  "scripts": {
+    "start": "netlify dev"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
   }
-  
+}
