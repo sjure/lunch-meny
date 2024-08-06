@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "cors-proxy.js",
     "scripts": {
-      "start": "node api/cors-proxy.js"
+      "start": "node cors-proxy.js"
     },
     "dependencies": {}
   }
