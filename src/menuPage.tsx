@@ -21,7 +21,10 @@ const MenuPage: React.FC = () => {
             const decodedText = decodeUnicodeEscapes(text)
             const unescapedText = decodeURIComponent(decodedText)
 
-            const bodyIndex = unescapedText.indexOf('"Ukesmeny')
+            const bodyIndex = unescapedText.toLowerCase().indexOf('mandag:')
+            if (bodyIndex === -1) {
+                console.error("Could not find 'Mandag:' in menu text")
+            }
             const endBody = unescapedText.indexOf('}', bodyIndex)
             const extractedText = unescapedText
                 .substring(bodyIndex, endBody - 1)
