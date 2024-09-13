@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Loader } from './loader'
 
 const MenuPage: React.FC = () => {
     const [menuContent, setMenuContent] = useState<string>('')
@@ -39,6 +40,13 @@ const MenuPage: React.FC = () => {
         })
     }, [])
 
+    if (!menuContent) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader />
+            </div>
+        )
+    }
     return (
         <div>
             <div
