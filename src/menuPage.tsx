@@ -1,6 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import { Loader } from './loader'
 
+const keywords = ['mandag;', 'meny;', 'mandag:', 'meny:', 'mandag', 'meny']
+
+function getBodyIndex(text: string) {
+    for (const keyword of keywords) {
+        const bodyIndex = text.toLowerCase().indexOf(keyword)
+        if (bodyIndex !== -1) {
+            return bodyIndex
+        }
+    }
+    return -1
+}
+
+const endKeywords = ['}', '</span>']
+
+function getEndBodyIndex(text: string, start: number): number {
+    let endBodyIndex = text.length
+    for (const keyword of endKeywords) {
+        const index = text.toLowerCase().indexOf(keyword, start + 1)
+        if (index !== -1 && index < endBodyIndex && index > start) {
+            endBodyIndex = index
+        }
+    }
+    return endBodyIndex
+}
+
+function replaceStringTagsForZeroTag(text: string) {
+    const textRemovedSlashes = text
+        .replaceAll('\\"', '')
+        .replaceAll('\\\\', '\\')
+        .replaceAll('\\r', '')
+        .replaceAll('\\t', '')
+    const splitText = textRemovedSlashes.split('\\n')
+    const textWithLineBreaks = splitText.map(line => `${line}<br/>`).join('')
+
+    return textWithLineBreaks
+}
+
 const MenuPage: React.FC = () => {
     const [menuContent, setMenuContent] = useState<string>('')
 
@@ -22,17 +59,17 @@ const MenuPage: React.FC = () => {
             const decodedText = decodeUnicodeEscapes(text)
             const unescapedText = decodeURIComponent(decodedText)
 
-            const bodyIndex = unescapedText.toLowerCase().indexOf('mandag:')
+            const bodyIndex = getBodyIndex(unescapedText)
             if (bodyIndex === -1) {
-                console.error("Could not find 'Mandag:' in menu text")
+                setMenuContent('Could not find menu <br/> Contact Sjur or Martin to fix this')
+                return
             }
-            const endBody = unescapedText.indexOf('}', bodyIndex)
-            const extractedText = unescapedText
-                .substring(bodyIndex, endBody - 1)
-                .replaceAll('\\"', '')
-                .replaceAll('\\', '')
+            const endBodyIndex = getEndBodyIndex(unescapedText, bodyIndex)
+            const extractedText = unescapedText.substring(bodyIndex, endBodyIndex)
 
-            setMenuContent(extractedText)
+            const replacedText = replaceStringTagsForZeroTag(extractedText)
+
+            setMenuContent(replacedText)
         }
 
         getMenu().catch(error => {
