@@ -89,7 +89,6 @@ const MenuPage: React.FC = () => {
             <div
                 id="content"
                 className="py-6 text-center"
-                style={{ whiteSpace: 'pre' }}
                 dangerouslySetInnerHTML={{ __html: menuContent }}
             ></div>
         </div>
