@@ -13,14 +13,25 @@ function getBodyIndex(text: string) {
     return -1
 }
 
-const endKeywords = ['}', '</span>']
+const friday = ['fredag', 'fredag:', 'fredag;']
+const endKeywords = ['salgsbetingelser', '}', '</']
 
 function getEndBodyIndex(text: string, start: number): number {
+    let fridayIndex = text.length
+    for (const keyword of friday) {
+        const index = text.toLowerCase().indexOf(keyword, start + 1)
+        if (index !== -1 && index < fridayIndex && index > start) {
+            fridayIndex = index
+            break
+        }
+    }
+
     let endBodyIndex = text.length
     for (const keyword of endKeywords) {
-        const index = text.toLowerCase().indexOf(keyword, start + 1)
-        if (index !== -1 && index < endBodyIndex && index > start) {
+        const index = text.toLowerCase().indexOf(keyword, fridayIndex + 1)
+        if (index !== -1 && index < endBodyIndex && index > fridayIndex) {
             endBodyIndex = index
+            break
         }
     }
     return endBodyIndex
@@ -57,7 +68,12 @@ const MenuPage: React.FC = () => {
             }
 
             const decodedText = decodeUnicodeEscapes(text)
-            const unescapedText = decodeURIComponent(decodedText)
+            let unescapedText = decodedText
+            try {
+                unescapedText = decodeURIComponent(decodedText)
+            } catch (error) {
+                console.error('Failed to decode URI component:', error)
+            }
 
             const bodyIndex = getBodyIndex(unescapedText)
             if (bodyIndex === -1) {
@@ -66,7 +82,6 @@ const MenuPage: React.FC = () => {
             }
             const endBodyIndex = getEndBodyIndex(unescapedText, bodyIndex)
             const extractedText = unescapedText.substring(bodyIndex, endBodyIndex)
-
             const replacedText = replaceStringTagsForZeroTag(extractedText)
 
             setMenuContent(replacedText)
