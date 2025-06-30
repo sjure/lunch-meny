@@ -13,8 +13,8 @@ function getBodyIndex(text: string) {
     return -1
 }
 
-const friday = ['fredag', 'fredag:', 'fredag;']
-const endKeywords = ['salgsbetingelser', '}', '</']
+const friday = ['fredag', 'fredag:', 'fredag;', 'torsdag', 'torsdag:', 'torsdag;']
+const endKeywords = ['salgsbetingelser', '}', '</', 'div']
 
 function getEndBodyIndex(text: string, start: number): number {
     let fridayIndex = text.length
@@ -56,7 +56,7 @@ const MenuPage: React.FC = () => {
         const getMenu = async () => {
             const proxyUrl =
                 'https://lunch-meny.netlify.app/.netlify/functions/cors-proxy/?url='
-            const targetUrl = 'https://cag30.munu.shop/ukens'
+            const targetUrl = 'https://viavika.munu.shop/ukens'
 
             const response = await fetch(proxyUrl + targetUrl)
             const text = await response.text()
